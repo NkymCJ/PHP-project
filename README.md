@@ -1,1 +1,2 @@
-#php
+# PHP-project
+easy PHP project
