@@ -1,5 +1,4 @@
 <?php
-// 1. 建立连接
 $dbhost = 'localhost:3306';
 $dbuser = 'root';
 $dbpass = '441525';
@@ -15,17 +14,11 @@ $setcharset = mysqli_set_charset($conn, 'utf8');
 if (!$setcharset) {
     exit('数据库字符集设置失败!');
 }
-// 2. 开始查询
 $sql = 'select * from users;';
 $query = mysqli_query($conn, $sql);
 if (!$query) {
     exit('数据库查询失败!');
 }
-// // 3. 遍历结果集
-// while ($item = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
-//     // echo $row['id'] . $row['name'] . $row['birthday'] . $row['gender'] . $row['avatar'] . '</br>';
-//     $data[] = $item;
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +53,7 @@ if (!$query) {
                 </tr>
             </thead>
             <tbody>
-                <?php while ($item = mysqli_fetch_array($query, MYSQLI_ASSOC)) : ?>
+                <?php while ($item = mysqli_fetch_array($query, MYSQLI_ASSOC)): ?>
                 <tr>
                     <th scope="row">
                         <?php echo $item['id']; ?>
@@ -82,7 +75,7 @@ if (!$query) {
                         <a class="btn btn-danger btn-xs" href="mySQL_list_delete.php?id=<?php echo $item['id']; ?>">删除</a>
                     </td>
                 </tr>
-                <?php endwhile ?>
+                <?php endwhile?>
             </tbody>
         </table>
     </main>

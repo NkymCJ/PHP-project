@@ -1,10 +1,8 @@
 <?php
-// 接收要删除的数据ID
-if(empty($_GET['id'])){
+if (empty($_GET['id'])) {
     exit('必须传入指定参数!');
 }
 $id = $_GET['id'];
-// 1. 建立连接
 $dbhost = 'localhost:3306';
 $dbuser = 'root';
 $dbpass = '441525';
@@ -20,9 +18,7 @@ $setcharset = mysqli_set_charset($conn, 'utf8');
 if (!$setcharset) {
     exit('数据库字符集设置失败!');
 }
-// 2. 开始查询
 $sql = 'delete from users where id = ' . $id . ' limit 1 ;';
-// $sql = 'delete from users where id in (' . $id . ');';
 $query = mysqli_query($conn, $sql);
 if (!$query) {
     exit('数据库查询失败!');

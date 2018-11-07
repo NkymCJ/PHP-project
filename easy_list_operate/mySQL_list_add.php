@@ -1,7 +1,6 @@
 <?php
 function add_user()
 {
-    // 验证输入非空
     if (empty($_POST['name'])) {
         $GLOBALS['error_message'] = '请输入姓名';
         return;
@@ -14,7 +13,6 @@ function add_user()
         $GLOBALS['error_message'] = '请输入出生年月';
         return;
     }
-    // 验证文件非空
     if (empty($_FILES['avatar'])) {
         $GLOBALS['error_message'] = '请上传头像';
         return;
@@ -43,14 +41,10 @@ function add_user()
         $GLOBALS['error_message'] = '头像文件上传失败(移动失败)';
         return;
     }
-    // 初始化值
     $name = $_POST['name'];
     $gender = $_POST['gender'];
     $birthday = $_POST['birthday'];
     $avatar = $dest;
-    // var_dump($name, $gender, $birthday, $avatar);
-    // 保存
-    // 1. 建立连接
     $dbhost = 'localhost:3306';
     $dbuser = 'root';
     $dbpass = '441525';
@@ -69,7 +63,6 @@ function add_user()
         $GLOBALS['error_message'] = '数据库字符集设置失败';
         return;
     }
-    // 2. 开始查询
     $sql = "insert into users values (null,'{$name}',{$gender},'{$birthday}','{$avatar}');";
     $query = mysqli_query($conn, $sql);
     if (!$query) {
@@ -101,11 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <main class="container">
         <h1 class="heading">添加用户</h1>
-        <?php if(isset($error_message)): ?>
+        <?php if (isset($error_message)): ?>
         <div class="alert alert-warning">
             <?php echo $error_message; ?>
         </div>
-        <?php endif ?>
+        <?php endif?>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data" autocomplete="off">
         <div class="form-group">
                 <label>头像</label>

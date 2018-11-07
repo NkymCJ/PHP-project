@@ -1,10 +1,8 @@
 <?php
-// 接收要编辑的数据ID
 if (empty($_GET['id'])) {
     exit('必须传入指定参数');
 }
 $id = $_GET['id'];
-// 1. 建立连接
 $dbhost = 'localhost:3306';
 $dbuser = 'root';
 $dbpass = '441525';
@@ -20,13 +18,11 @@ $setcharset = mysqli_set_charset($conn, 'utf8');
 if (!$setcharset) {
     exit('数据库字符集设置失败');
 }
-// 2. 开始查询
 $sql = "select * from users where id = {$id} limit 1;";
 $query = mysqli_query($conn, $sql);
 if (!$query) {
     exit('数据库查询失败');
 }
-// $users = mysqli_affected_rows($conn);
 $users = mysqli_fetch_assoc($query);
 if (!$users) {
     exit('找不到该条数据');
@@ -36,7 +32,6 @@ function edit()
 {
     global $users;
     global $id;
-    // 验证输入非空
     if (empty($_POST['name'])) {
         $GLOBALS['error_message'] = '请输入姓名';
         return;
@@ -49,12 +44,10 @@ function edit()
         $GLOBALS['error_message'] = '请输入出生年月';
         return;
     }
-    // 初始化值
     $users['name'] = $_POST['name'];
     $users['gender'] = $_POST['gender'];
     $users['birthday'] = $_POST['birthday'];
-    // 验证文件非空
-    if (isset($_FILES['avatar'])&&$_FILES['avatar']['error']==UPLOAD_ERR_OK) {
+    if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] == UPLOAD_ERR_OK) {
         $avatar_source = $_FILES['avatar'];
         if ($avatar_source['size'] > 10 * 1024 * 1024) {
             $GLOBALS['error_message'] = '头像文件过大';
@@ -77,10 +70,6 @@ function edit()
         }
         $users['avatar'] = $dest;
     }
-    
-    // var_dump($name, $gender, $birthday, $avatar);
-    // 保存
-    // 1. 建立连接
     $dbhost = 'localhost:3306';
     $dbuser = 'root';
     $dbpass = '441525';
@@ -99,7 +88,6 @@ function edit()
         $GLOBALS['error_message'] = '数据库字符集设置失败';
         return;
     }
-    // 2. 开始查询
     $sql = "update users set `name` = '{$users['name']}',`gender` = {$users['gender']},`birthday` = '{$users['birthday']}',`avatar` = '{$users['avatar']}' where `id` = {$id} limit 1;";
     $query = mysqli_query($conn, $sql);
     if (!$query) {
@@ -107,7 +95,6 @@ function edit()
         return;
     }
     $affected_rows = mysqli_affected_rows($conn);
-    // 这里有个BUG, 即当没有做任何修改的更新时, 影响行数会是0, 报错
     if ($affected_rows != 1) {
         $GLOBALS['error_message'] = '数据库修改数据失败';
         return;
@@ -136,11 +123,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="heading">编辑
             <?php echo $users['name']; ?>
         </h1>
-        <?php if (isset($error_message)) : ?>
+        <?php if (isset($error_message)): ?>
         <div class="alert alert-warning">
             <?php echo $error_message; ?>
         </div>
-        <?php endif ?>
+        <?php endif?>
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>?id=<?php echo $users['id']; ?>" method="post" enctype="multipart/form-data" autocomplete="off">
             <img src="<?php echo $users['avatar']; ?>" alt="avatar" style="height:50px;width:50px;">
             <div class="form-group">
